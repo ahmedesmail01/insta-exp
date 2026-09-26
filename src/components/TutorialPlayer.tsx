@@ -88,18 +88,17 @@ export function TutorialPlayer({ method }: TutorialPlayerProps) {
         </section>
 
         <div className="relative mx-auto w-full max-w-[22rem] flex-1">
-          <div className="overflow-hidden rounded-[1.6rem] border border-white/15 bg-black shadow-2xl shadow-black/50">
-            <div className="relative aspect-[9/17] w-full max-h-[min(58dvh,560px)] bg-[#0d0618]">
-              <Image
-                key={step.image}
-                src={step.image}
-                alt={step.title}
-                fill
-                priority
-                className="object-cover object-top animate-[fadeSlide_280ms_ease]"
-                sizes="(max-width: 480px) 92vw, 360px"
-              />
-            </div>
+          <div className="overflow-hidden rounded-[1.6rem] border border-white/15 bg-[#0d0618] shadow-2xl shadow-black/50">
+            <Image
+              key={step.image}
+              src={step.image}
+              alt={step.title}
+              width={720}
+              height={1280}
+              priority
+              className="h-auto w-full animate-[fadeSlide_280ms_ease]"
+              sizes="(max-width: 480px) 92vw, 360px"
+            />
           </div>
         </div>
 
