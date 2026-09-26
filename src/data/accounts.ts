@@ -34,11 +34,11 @@ export const PAYMENT_ACCOUNTS: PaymentAccount[] = [
         value: "7230001000001030",
         copyLabel: "نسخ رقم الحساب",
       },
-      {
-        label: "IBAN",
-        value: "EG530002072307230001000001030",
-        copyLabel: "نسخ رقم الـ IBAN",
-      },
+      // {
+      //   label: "IBAN",
+      //   value: "EG530002072307230001000001030",
+      //   copyLabel: "نسخ رقم الـ IBAN",
+      // },
     ],
   },
   {
@@ -55,11 +55,11 @@ export const PAYMENT_ACCOUNTS: PaymentAccount[] = [
         value: "100042185447",
         copyLabel: "نسخ رقم الحساب",
       },
-      {
-        label: "IBAN",
-        value: "EG030010008300000100042185447",
-        copyLabel: "نسخ رقم الـ IBAN",
-      },
+      // {
+      //   label: "IBAN",
+      //   value: "EG030010008300000100042185447",
+      //   copyLabel: "نسخ رقم الـ IBAN",
+      // },
     ],
   },
   {

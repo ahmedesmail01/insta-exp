@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { PaymentMethodId } from "@/data/accounts";
 import { getAccountById } from "@/data/accounts";
 import { getMethodLabel, getTutorialSteps } from "@/data/tutorial-steps";
+import { InstaPayStepView } from "@/components/instapay/InstaPayStepView";
 import { CopyButton } from "./CopyButton";
 import { ProgressDots } from "./ProgressDots";
 
@@ -18,19 +18,44 @@ export function TutorialPlayer({ method }: TutorialPlayerProps) {
   const account = useMemo(() => getAccountById(method), [method]);
   const [index, setIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
+  const [done, setDone] = useState(false);
   const step = steps[index];
   const isFirst = index === 0;
   const isLast = index === steps.length - 1;
   const primaryField = account.fields[0];
 
   function goNext() {
+    if (isLast) {
+      setDone(true);
+      return;
+    }
     setIndex((value) => Math.min(value + 1, steps.length - 1));
     setShowDetails(false);
   }
 
   function goPrev() {
+    if (done) {
+      setDone(false);
+      return;
+    }
     setIndex((value) => Math.max(value - 1, 0));
     setShowDetails(false);
+  }
+
+  if (done) {
+    return (
+      <div className="flex min-h-dvh flex-col bg-[#12061f] text-white">
+        <main className="mx-auto flex w-full max-w-lg flex-1 flex-col items-center justify-center gap-4 px-4 py-6">
+          <InstaPayStepView
+            screen="success"
+            account={account}
+            onContinue={() => {
+              window.location.href = "/";
+            }}
+          />
+        </main>
+      </div>
+    );
   }
 
   return (
@@ -45,7 +70,7 @@ export function TutorialPlayer({ method }: TutorialPlayerProps) {
             رجوع
           </Link>
           <div className="text-center">
-            <p className="text-[11px] text-white/55">شرح التحويل عبر إنستاباي</p>
+            <p className="text-[11px] text-white/55">شرح تفاعلي لإنستاباي</p>
             <h1 className="text-sm font-bold">{getMethodLabel(method)}</h1>
           </div>
           <div className="min-w-14 text-end text-sm font-semibold text-[#F26522]">
@@ -87,19 +112,13 @@ export function TutorialPlayer({ method }: TutorialPlayerProps) {
           </div>
         </section>
 
-        <div className="relative mx-auto w-full max-w-[22rem] flex-1">
-          <div className="overflow-hidden rounded-[1.6rem] border border-white/15 bg-[#0d0618] shadow-2xl shadow-black/50">
-            <Image
-              key={step.image}
-              src={step.image}
-              alt={step.title}
-              width={720}
-              height={1280}
-              priority
-              className="h-auto w-full animate-[fadeSlide_280ms_ease]"
-              sizes="(max-width: 480px) 92vw, 360px"
-            />
-          </div>
+        <div className="animate-[fadeSlide_280ms_ease]">
+          <InstaPayStepView
+            key={step.screen}
+            screen={step.screen}
+            account={account}
+            onContinue={goNext}
+          />
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/5 px-3 py-2.5">
@@ -109,7 +128,9 @@ export function TutorialPlayer({ method }: TutorialPlayerProps) {
             className="flex w-full min-h-10 items-center justify-between gap-2 text-sm font-semibold"
           >
             <span>بيانات التحويل للنسخ</span>
-            <span className="text-[#F26522]">{showDetails ? "إخفاء" : "إظهار"}</span>
+            <span className="text-[#F26522]">
+              {showDetails ? "إخفاء" : "إظهار"}
+            </span>
           </button>
           {showDetails ? (
             <div className="mt-2 space-y-2 border-t border-white/10 pt-2">
@@ -120,7 +141,10 @@ export function TutorialPlayer({ method }: TutorialPlayerProps) {
                 >
                   <div className="min-w-0">
                     <p className="text-[11px] text-white/50">{field.label}</p>
-                    <p className="truncate text-sm font-bold tracking-wide" dir="ltr">
+                    <p
+                      className="truncate text-sm font-bold tracking-wide"
+                      dir="ltr"
+                    >
                       {field.value}
                     </p>
                   </div>
@@ -153,19 +177,20 @@ export function TutorialPlayer({ method }: TutorialPlayerProps) {
             السابق
           </button>
           {isLast ? (
-            <Link
-              href="/"
-              className="flex min-h-12 flex-[1.35] items-center justify-center rounded-2xl bg-gradient-to-l from-[#6A0DAD] to-[#8B2FBF] text-base font-bold"
+            <button
+              type="button"
+              onClick={goNext}
+              className="min-h-12 flex-[1.35] rounded-2xl bg-gradient-to-l from-[#6A0DAD] to-[#8B2FBF] text-base font-bold active:scale-[0.99]"
             >
-              إنهاء الشرح
-            </Link>
+              تأكيد وإنهاء
+            </button>
           ) : (
             <button
               type="button"
               onClick={goNext}
               className="min-h-12 flex-[1.35] rounded-2xl bg-gradient-to-l from-[#6A0DAD] to-[#8B2FBF] text-base font-bold active:scale-[0.99]"
             >
-              التالي
+              تخطي
             </button>
           )}
         </div>
