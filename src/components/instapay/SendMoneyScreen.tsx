@@ -62,7 +62,6 @@ export function SendMoneyScreen({
       setPhone("");
       setAmount("");
       setPurpose("");
-      setNotes("");
     }
   }, [mode, account, isWallet]);
 
@@ -112,8 +111,7 @@ export function SendMoneyScreen({
       }
       if (notes.replace(/\D/g, "").length < 10) return;
     } else {
-      if (!phone || !amount) return;
-      if (notes.replace(/\D/g, "").length < 10) return;
+      if (!phone || !amount || !purpose) return;
     }
     onContinue();
   }
@@ -240,9 +238,6 @@ export function SendMoneyScreen({
                 setAmount={setAmount}
                 purpose={purpose}
                 setPurpose={setPurpose}
-                notes={notes}
-                setNotes={setNotes}
-                highlightNotes={highlightNotes}
                 onPaste={pastePhone}
                 suggestedPhone={account.fields[0]?.value ?? ""}
               />
@@ -514,9 +509,6 @@ type WalletFormProps = {
   setAmount: (v: string) => void;
   purpose: string;
   setPurpose: (v: string) => void;
-  notes: string;
-  setNotes: (v: string) => void;
-  highlightNotes: boolean;
   onPaste: () => void;
   suggestedPhone: string;
 };
@@ -528,18 +520,16 @@ function WalletForm({
   setAmount,
   purpose,
   setPurpose,
-  notes,
-  setNotes,
   onPaste,
   suggestedPhone,
 }: WalletFormProps) {
-  const current = getWalletFormStep({ phone, amount, purpose, notes });
+  const current = getWalletFormStep({ phone, amount, purpose });
 
   return (
     <div className="space-y-2.5">
       <div className="flex items-center justify-between">
         <p className="text-[11px] font-semibold" style={{ color: IP.muted }}>
-          املأ الحقول بالترتيب ١ ← ٤
+          املأ الحقول بالترتيب ١ ← ٣
         </p>
         <h3 className="text-sm font-bold" style={{ color: IP.purple }}>
           رقم المحفظة
@@ -619,30 +609,6 @@ function WalletForm({
           <option value="أخرى">أخرى</option>
         </select>
       </StepField>
-
-      <StepField
-        step={4}
-        label="أدخل رقم موبايلك في الملاحظات"
-        active={current === 4}
-        done={notes.replace(/\D/g, "").length >= 10}
-        locked={current < 4}
-      >
-        <input
-          className="w-full bg-transparent text-sm outline-none"
-          placeholder="01xxxxxxxxx"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value.replace(/[^\d]/g, ""))}
-          inputMode="tel"
-          dir="ltr"
-          aria-label="رقم الموبايل في الملاحظات"
-          disabled={current < 4}
-        />
-      </StepField>
-      {current === 4 ? (
-        <p className="text-[11px]" style={{ color: IP.orange }}>
-          مطلوب: اكتب رقم هاتفك للتواصل وتأكيد التحويل
-        </p>
-      ) : null}
     </div>
   );
 }

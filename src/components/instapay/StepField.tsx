@@ -83,11 +83,9 @@ export function getWalletFormStep(values: {
   phone: string;
   amount: string;
   purpose: string;
-  notes: string;
 }): number {
   if (!values.phone) return 1;
   if (!values.amount) return 2;
   if (!values.purpose) return 3;
-  if (values.notes.replace(/\D/g, "").length < 10) return 4;
-  return 5;
+  return 4;
 }

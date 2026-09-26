@@ -1,17 +1,12 @@
 "use client";
 
 import type { PaymentAccount } from "@/data/accounts";
+import {
+  WHATSAPP_DISPLAY,
+  WHATSAPP_URL,
+} from "@/data/whatsapp";
 import { PhoneFrame } from "./PhoneFrame";
 import { IP } from "./tokens";
-
-export const WHATSAPP_NUMBER = "201110008912";
-export const WHATSAPP_DISPLAY = "+20 11 10008912";
-
-const WHATSAPP_MESSAGE = encodeURIComponent(
-  "مرحباً، مرفق سكرين شوت التحويل لشركة الوسام",
-);
-
-export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WHATSAPP_MESSAGE}`;
 
 type SuccessScreenProps = {
   account: PaymentAccount;
